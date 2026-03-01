@@ -1,0 +1,11 @@
+{
+  "name": "BodyLog",
+  "short_name": "BodyLog",
+  "description": "Личный трекинг: вес, питание, дозировки, активность",
+  "start_url": "/dashboard",
+  "display": "standalone",
+  "background_color": "#f8fafc",
+  "theme_color": "#0f172a",
+  "orientation": "portrait-primary",
+  "icons": []
+}

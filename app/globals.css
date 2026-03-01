@@ -1,0 +1,209 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 97%;
+    --foreground: 222 47% 11%;
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 11%;
+    --primary: 222 47% 18%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96%;
+    --secondary-foreground: 222 47% 11%;
+    --muted: 210 40% 96%;
+    --muted-foreground: 215 16% 47%;
+    --accent: 210 40% 96%;
+    --accent-foreground: 222 47% 11%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214 32% 91%;
+    --input: 214 32% 91%;
+    --ring: 222 47% 18%;
+    --radius: 0.75rem;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
+    --glass-blur: 24px;
+    --glass-border-rgb: 255, 255, 255;
+    --glass-border-opacity: 0.45;
+    --glass-shadow: 0 8px 32px -8px rgb(0 0 0 / 0.08);
+    /* Liquid Glass (как в https://blog.logrocket.com/how-create-liquid-glass-effects-css-and-svg/) */
+    --btn-lg-radius: 1rem;
+    --btn-content-bg: hsl(0 0% 100% / 0.15);
+    --liquid-glass-filter: blur(0.5rem) brightness(1.5);
+  }
+
+  .dark {
+    --background: 222 47% 5%;
+    --foreground: 210 40% 98%;
+    --card: 222 47% 7%;
+    --card-foreground: 210 40% 98%;
+    --primary: 210 40% 98%;
+    --primary-foreground: 222 47% 18%;
+    --secondary: 217 33% 14%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217 33% 14%;
+    --muted-foreground: 215 20% 65%;
+    --accent: 217 33% 14%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62% 50%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217 33% 14%;
+    --input: 217 33% 14%;
+    --ring: 212 95% 68%;
+    --popover: 222 47% 7%;
+    --popover-foreground: 210 40% 98%;
+    --glass-border-rgb: 255, 255, 255;
+    --glass-border-opacity: 0.08;
+    --glass-shadow: 0 8px 32px -8px rgb(0 0 0 / 0.4);
+    --btn-content-bg: hsl(0 0% 100% / 0.08);
+    --liquid-glass-filter: blur(0.5rem) brightness(1.4);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+}
+
+/* Жидкое стекло: полупрозрачность + размытие */
+@layer components {
+  .glass {
+    background: hsl(var(--card) / 0.72);
+    backdrop-filter: blur(var(--glass-blur)) saturate(180%);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(180%);
+    border: 1px solid rgb(var(--glass-border-rgb) / var(--glass-border-opacity));
+    box-shadow: var(--glass-shadow);
+  }
+  .dark .glass {
+    background: hsl(var(--card) / 0.6);
+  }
+
+  /* Liquid Glass: слой размытия + слой контента (двухслойная структура из статьи) */
+  .liquid-glass-card {
+    position: relative;
+    overflow: hidden;
+    background: transparent;
+    border: 1px solid rgb(var(--glass-border-rgb) / var(--glass-border-opacity));
+    box-shadow: var(--glass-shadow);
+  }
+  .liquid-glass-filter {
+    position: absolute;
+    inset: 0;
+    backdrop-filter: var(--liquid-glass-filter);
+    -webkit-backdrop-filter: var(--liquid-glass-filter);
+    pointer-events: none;
+  }
+  .liquid-glass-content {
+    position: relative;
+    z-index: 10;
+    background: var(--btn-content-bg);
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+/* Лёгкая анимация при наведении (отключается при prefers-reduced-motion) */
+@layer utilities {
+  .hover-lift {
+    @apply transition-all duration-300 ease-out;
+  }
+  @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+    .hover-lift:hover {
+      transform: translateY(-2px) scale(1.005);
+      box-shadow: var(--glass-shadow), 0 12px 40px -12px rgb(0 0 0 / 0.12);
+    }
+    .dark .hover-lift:hover {
+      box-shadow: var(--glass-shadow), 0 12px 40px -12px rgb(0 0 0 / 0.35);
+    }
+  }
+  .hover-scale-in {
+    @apply transition-transform duration-200 ease-out;
+  }
+  @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+    .hover-scale-in:hover {
+      transform: scale(1.02);
+    }
+  }
+  .hover-scale-in:active {
+    transform: scale(0.98);
+  }
+}
+
+/* Пиксель-арт «весы» (как в https://github.com/jvalen/pixel-art-react — один div + box-shadow + keyframes) */
+@layer components {
+  .pixel-art-scale {
+    --pixel-size: 4px;
+    --pixel-fg: hsl(var(--foreground) / 0.75);
+    width: var(--pixel-size);
+    height: var(--pixel-size);
+    position: relative;
+    flex-shrink: 0;
+    box-shadow:
+      12px 0 var(--pixel-fg),
+      8px 4px var(--pixel-fg),
+      12px 4px var(--pixel-fg),
+      16px 4px var(--pixel-fg),
+      4px 8px var(--pixel-fg),
+      8px 8px var(--pixel-fg),
+      12px 8px var(--pixel-fg),
+      16px 8px var(--pixel-fg),
+      20px 8px var(--pixel-fg),
+      8px 12px var(--pixel-fg),
+      12px 12px var(--pixel-fg),
+      16px 12px var(--pixel-fg),
+      0 16px var(--pixel-fg),
+      8px 16px var(--pixel-fg),
+      16px 16px var(--pixel-fg);
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .pixel-art-scale {
+      animation: pixel-art-scale-tilt 2.5s ease-in-out infinite;
+    }
+  }
+}
+@keyframes pixel-art-scale-tilt {
+  0%, 100% {
+    box-shadow:
+      12px 0 var(--pixel-fg),
+      8px 4px var(--pixel-fg),
+      12px 4px var(--pixel-fg),
+      16px 4px var(--pixel-fg),
+      4px 8px var(--pixel-fg),
+      8px 8px var(--pixel-fg),
+      12px 8px var(--pixel-fg),
+      16px 8px var(--pixel-fg),
+      20px 8px var(--pixel-fg),
+      8px 12px var(--pixel-fg),
+      12px 12px var(--pixel-fg),
+      16px 12px var(--pixel-fg),
+      0 16px var(--pixel-fg),
+      8px 16px var(--pixel-fg),
+      16px 16px var(--pixel-fg);
+  }
+  50% {
+    box-shadow:
+      12px 0 var(--pixel-fg),
+      8px 4px var(--pixel-fg),
+      12px 4px var(--pixel-fg),
+      16px 4px var(--pixel-fg),
+      4px 8px var(--pixel-fg),
+      8px 8px var(--pixel-fg),
+      12px 8px var(--pixel-fg),
+      16px 8px var(--pixel-fg),
+      20px 8px var(--pixel-fg),
+      8px 12px var(--pixel-fg),
+      12px 12px var(--pixel-fg),
+      16px 12px var(--pixel-fg),
+      -4px 16px var(--pixel-fg),
+      8px 16px var(--pixel-fg),
+      20px 16px var(--pixel-fg);
+  }
+}
