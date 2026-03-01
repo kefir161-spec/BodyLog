@@ -398,46 +398,51 @@ export function SettingsView() {
                 />
               </div>
             </div>
-            <div className="grid gap-4 sm:grid-cols-2">
-              <div className="grid gap-2">
-                <Label htmlFor="customFoodApiBaseUrl">Base URL API еды</Label>
-                <Input
-                  id="customFoodApiBaseUrl"
-                  type="url"
-                  placeholder="https://..."
-                  {...form.register('customFoodApiBaseUrl')}
-                />
-              </div>
-              <div className="grid gap-2">
-                <Label htmlFor="customFoodApiKey">Ключ API еды</Label>
-                <Input
-                  id="customFoodApiKey"
-                  type="password"
-                  placeholder="Не сохранять в экспорт по умолчанию"
-                  {...form.register('customFoodApiKey')}
-                />
-              </div>
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="usdaApiKey">Ключ USDA API (опционально)</Label>
-              <Input
-                id="usdaApiKey"
-                type="password"
-                placeholder="—"
-                {...form.register('usdaApiKey')}
-              />
-            </div>
-            <div className="flex items-center gap-2">
-              <input
-                type="checkbox"
-                id="exportSecretsEnabled"
-                {...form.register('exportSecretsEnabled')}
-                className="h-4 w-4 rounded border-input"
-              />
-              <Label htmlFor="exportSecretsEnabled" className="font-normal">
-                Включать ключи API в экспорт (не рекомендуется)
-              </Label>
-            </div>
+            {/* Настройки API — только для админа (локальная разработка), в продакшене скрыты */}
+            {process.env.NODE_ENV === 'development' && (
+              <>
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <div className="grid gap-2">
+                    <Label htmlFor="customFoodApiBaseUrl">Base URL API еды</Label>
+                    <Input
+                      id="customFoodApiBaseUrl"
+                      type="url"
+                      placeholder="https://..."
+                      {...form.register('customFoodApiBaseUrl')}
+                    />
+                  </div>
+                  <div className="grid gap-2">
+                    <Label htmlFor="customFoodApiKey">Ключ API еды</Label>
+                    <Input
+                      id="customFoodApiKey"
+                      type="password"
+                      placeholder="Не сохранять в экспорт по умолчанию"
+                      {...form.register('customFoodApiKey')}
+                    />
+                  </div>
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="usdaApiKey">Ключ USDA API (опционально)</Label>
+                  <Input
+                    id="usdaApiKey"
+                    type="password"
+                    placeholder="—"
+                    {...form.register('usdaApiKey')}
+                  />
+                </div>
+                <div className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    id="exportSecretsEnabled"
+                    {...form.register('exportSecretsEnabled')}
+                    className="h-4 w-4 rounded border-input"
+                  />
+                  <Label htmlFor="exportSecretsEnabled" className="font-normal">
+                    Включать ключи API в экспорт (не рекомендуется)
+                  </Label>
+                </div>
+              </>
+            )}
             <Button type="submit" disabled={form.formState.isSubmitting}>
               {form.formState.isSubmitting ? (
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
